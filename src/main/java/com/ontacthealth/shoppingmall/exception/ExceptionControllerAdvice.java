@@ -1,9 +1,9 @@
 package com.ontacthealth.shoppingmall.exception;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import com.ontacthealth.shoppingmall.model.response.OntactApiResponse;
-import com.ontacthealth.shoppingmall.model.response.OntactApiResult;
-import com.ontacthealth.shoppingmall.model.response.OntactErrorResponse;
+import com.ontacthealth.shoppingmall.base_model.response.ShoppingApiResponse;
+import com.ontacthealth.shoppingmall.base_model.response.ShoppingApiResult;
+import com.ontacthealth.shoppingmall.base_model.response.ShoppingErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.expression.ParseException;
 import org.springframework.http.HttpHeaders;
@@ -30,49 +30,49 @@ import java.security.NoSuchAlgorithmException;
 @Slf4j
 @ControllerAdvice
 public class ExceptionControllerAdvice {
-    @ExceptionHandler(OntactApiRuntimeException.class)
-    public ResponseEntity<OntactApiResponse> handleOntactApiRuntimeException(OntactApiRuntimeException e) {
+    @ExceptionHandler(ShoppingApiRuntimeException.class)
+    public ResponseEntity<ShoppingApiResponse> handleOntactApiRuntimeException(ShoppingApiRuntimeException e) {
         log.error("OntactApiRuntimeException. => {}", e.toString());
 
         HttpHeaders httpHeaders = new HttpHeaders();
         Charset utf8 = StandardCharsets.UTF_8;
         httpHeaders.setContentType(new MediaType(MediaType.APPLICATION_JSON, utf8));
 
-        OntactApiResponse response = new OntactErrorResponse(e.getOntactApiResult());
+        ShoppingApiResponse response = new ShoppingErrorResponse(e.getOntactApiResult());
         return ResponseEntity.status(HttpStatus.OK).headers(httpHeaders).body(response);
     }
 
     @ExceptionHandler({ InvalidKeyException.class, NoSuchAlgorithmException.class })
     public ResponseEntity<?> handleHashException(Exception e) {
-        return systemErrorResponse(OntactApiResult.SERVER_ERROR, new Exception("Encrypt/Decrypt key is requested"), HttpStatus.LOCKED);
+        return systemErrorResponse(ShoppingApiResult.SERVER_ERROR, new Exception("Encrypt/Decrypt key is requested"), HttpStatus.LOCKED);
     }
 
     @ExceptionHandler({ Exception.class })
     public ResponseEntity<?> handleAnyException(Exception e, HttpServletResponse response) {
         e.printStackTrace();
-        return logicalErrorResponse(OntactApiResult.SERVER_ERROR, e, HttpStatus.INTERNAL_SERVER_ERROR,response);
+        return logicalErrorResponse(ShoppingApiResult.SERVER_ERROR, e, HttpStatus.INTERNAL_SERVER_ERROR,response);
     }
 
     @ExceptionHandler({ RuntimeException.class })
     public ResponseEntity<?> handleRunTimeException(Exception e, HttpServletResponse response) {
         e.printStackTrace();
-        return logicalErrorResponse(OntactApiResult.SERVER_ERROR, e, HttpStatus.INTERNAL_SERVER_ERROR,response);
+        return logicalErrorResponse(ShoppingApiResult.SERVER_ERROR, e, HttpStatus.INTERNAL_SERVER_ERROR,response);
     }
 
     @ExceptionHandler({ IOException.class, ParseException.class,  JsonParseException.class })
     public ResponseEntity<?> handleParseException(Exception e, HttpServletResponse response) {
-        return logicalErrorResponse(OntactApiResult.SERVER_ERROR, e, HttpStatus.BAD_REQUEST,response);
+        return logicalErrorResponse(ShoppingApiResult.SERVER_ERROR, e, HttpStatus.BAD_REQUEST,response);
     }
 
     @ExceptionHandler({InterruptedException.class})
     public ResponseEntity<?> handleInterruptedException(Exception e, HttpServletResponse response){
         e.printStackTrace();
-        return logicalErrorResponse(OntactApiResult.SERVER_ERROR, e, HttpStatus.INTERNAL_SERVER_ERROR,response);
+        return logicalErrorResponse(ShoppingApiResult.SERVER_ERROR, e, HttpStatus.INTERNAL_SERVER_ERROR,response);
     }
 
-    private ResponseEntity<OntactErrorResponse> systemErrorResponse(OntactApiResult result, Exception e, HttpStatus status) {
+    private ResponseEntity<ShoppingErrorResponse> systemErrorResponse(ShoppingApiResult result, Exception e, HttpStatus status) {
         String message = getMessage(e);
-        OntactErrorResponse<String> errorResponse = new OntactErrorResponse<>(result, message);
+        ShoppingErrorResponse<String> errorResponse = new ShoppingErrorResponse<>(result, message);
         return ResponseEntity.status(status).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
     }
 
@@ -83,12 +83,12 @@ public class ExceptionControllerAdvice {
      * @param response
      * @return
      */
-    private ResponseEntity<?> logicalErrorResponse(OntactApiResult result, Exception e, HttpStatus status, HttpServletResponse response) {
+    private ResponseEntity<?> logicalErrorResponse(ShoppingApiResult result, Exception e, HttpStatus status, HttpServletResponse response) {
         String message = getMessage(e);
         response.setHeader("errorMessageCode", String.valueOf(result.getResultCode()));
         response.setHeader("errorMessage", result.getMessage());
 
-        OntactErrorResponse<String> errorResponse = new OntactErrorResponse<>(result,message);
+        ShoppingErrorResponse<String> errorResponse = new ShoppingErrorResponse<>(result,message);
         return ResponseEntity.status(status).contentType(MediaType.APPLICATION_JSON).header("errorMessage",message).body(errorResponse);
     }
 

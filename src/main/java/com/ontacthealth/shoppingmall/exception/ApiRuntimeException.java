@@ -1,6 +1,6 @@
 package com.ontacthealth.shoppingmall.exception;
 
-import com.ontacthealth.shoppingmall.model.response.OntactApiResult;
+import com.ontacthealth.shoppingmall.base_model.response.ShoppingApiResult;
 
 /**
  * @author daehoonchoi
@@ -9,15 +9,15 @@ import com.ontacthealth.shoppingmall.model.response.OntactApiResult;
  * @since 2021/12/28
  */
 public class ApiRuntimeException extends RuntimeException{
-    private OntactApiResult ontactApiResult;
+    private ShoppingApiResult shoppingApiResult;
 
     public ApiRuntimeException(){
         super();
-        ontactApiResult = OntactApiResult.SERVER_ERROR;
+        shoppingApiResult = ShoppingApiResult.SERVER_ERROR;
     }
 
-    public ApiRuntimeException(OntactApiResult ontactApiResult){
-        super(ontactApiResult.getMessage());
-        ontactApiResult = OntactApiResult.SERVER_ERROR;
+    public ApiRuntimeException(ShoppingApiResult shoppingApiResult){
+        super(shoppingApiResult.getMessage());
+        shoppingApiResult = ShoppingApiResult.SERVER_ERROR;
     }
 }

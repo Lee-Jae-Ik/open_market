@@ -1,6 +1,6 @@
 package com.ontacthealth.shoppingmall.exception;
 
-import com.ontacthealth.shoppingmall.model.response.OntactApiResult;
+import com.ontacthealth.shoppingmall.base_model.response.ShoppingApiResult;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -15,7 +15,7 @@ public class InvalidRequestParameterException extends RuntimeException{
     private static final String DEFAULT_MESSAGE = "InvalidParam";
     private static final String MESSAGE_PREFIX = DEFAULT_MESSAGE + ": ";
 
-    private OntactApiResult result;
+    private ShoppingApiResult result;
 
     public InvalidRequestParameterException() {
         super(DEFAULT_MESSAGE);
@@ -37,7 +37,7 @@ public class InvalidRequestParameterException extends RuntimeException{
         super(MESSAGE_PREFIX + message, cause, enableSuppression, writableStackTrace);
     }
 
-    public InvalidRequestParameterException(OntactApiResult result, String detailMessage) {
+    public InvalidRequestParameterException(ShoppingApiResult result, String detailMessage) {
         super(detailMessage);
         log.error("message : {}", detailMessage);
         log.error("EscrowApiResultMessage : {}", result.getMessage());
@@ -46,7 +46,7 @@ public class InvalidRequestParameterException extends RuntimeException{
     }
 
     //메시지 치환방식에 사용
-    public InvalidRequestParameterException(OntactApiResult result, String detailMessage, String arg) {
+    public InvalidRequestParameterException(ShoppingApiResult result, String detailMessage, String arg) {
         super(detailMessage.replace("%n", arg));
         result.setMessage(detailMessage.replace("%n", arg));
         log.error("message : {}", detailMessage.replace("%n", arg));
@@ -56,12 +56,12 @@ public class InvalidRequestParameterException extends RuntimeException{
         this.result = result;
     }
 
-    public InvalidRequestParameterException(OntactApiResult result) {
+    public InvalidRequestParameterException(ShoppingApiResult result) {
         super(MESSAGE_PREFIX + result.getMessage());
         this.result = result;
     }
 
-    public OntactApiResult getEscrowApiResult() {
+    public ShoppingApiResult getEscrowApiResult() {
         return result;
     }
 }

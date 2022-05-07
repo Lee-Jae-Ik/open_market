@@ -1,9 +1,9 @@
 package com.ontacthealth.shoppingmall.controller.base;
 
-import com.ontacthealth.shoppingmall.model.response.OntactApiResult;
-import com.ontacthealth.shoppingmall.model.response.OntactErrorResponse;
-import com.ontacthealth.shoppingmall.model.response.OntactResponse;
-import com.ontacthealth.shoppingmall.model.response.OntactSuccessResponse;
+import com.ontacthealth.shoppingmall.base_model.response.ShoppingApiResult;
+import com.ontacthealth.shoppingmall.base_model.response.ShoppingErrorResponse;
+import com.ontacthealth.shoppingmall.base_model.response.ShoppingResponse;
+import com.ontacthealth.shoppingmall.base_model.response.ShoppingSuccessResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +15,12 @@ import org.springframework.http.ResponseEntity;
  * @since 2021/12/21
  */
 public abstract class BaseAbstractController {
-    protected <T> ResponseEntity<OntactResponse> responseApi(T body) {
-        return response(new OntactSuccessResponse(body));
+    protected <T> ResponseEntity<ShoppingResponse> responseApi(T body) {
+        return response(new ShoppingSuccessResponse(body));
     }
 
-    protected ResponseEntity<OntactErrorResponse> responseError(OntactApiResult ontactApiResult) {
-        return responseError(new OntactErrorResponse(ontactApiResult));
+    protected ResponseEntity<ShoppingErrorResponse> responseError(ShoppingApiResult shoppingApiResult) {
+        return responseError(new ShoppingErrorResponse(shoppingApiResult));
     }
 
     private <T> ResponseEntity<T> response(T body) {
