@@ -1,6 +1,11 @@
 # logging config
 logging:
   config: classpath:logback-spring.xml
+  org:
+    hibernate:
+      type:
+        descriptor:
+          sql: trace
 
 #mybatis config
 mybatis:
@@ -26,6 +31,9 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
       ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
 server:
   port: 8080
   tomcat:

@@ -38,6 +38,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
 
         return jpaQueryFactory
                 .select(QItem.item)
+                .from(QItem.item)
                 .join(QItem.item.category,QCategory.category)
                 .fetchJoin()
                 .where(booleanBuilder)

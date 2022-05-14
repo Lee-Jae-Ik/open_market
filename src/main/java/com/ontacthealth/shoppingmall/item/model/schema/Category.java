@@ -3,6 +3,8 @@ package com.ontacthealth.shoppingmall.item.model.schema;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Category
@@ -13,12 +15,13 @@ import javax.persistence.*;
  * @since 2022/05/07
  */
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Entity
 @Table(name = "category")
 public class Category {
 
     @Id
+    @Column(name = "category_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

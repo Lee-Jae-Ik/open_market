@@ -32,7 +32,7 @@ public class ItemController extends BaseController {
     }
 
     @GetMapping("/item")
-    public ResponseEntity<ShoppingResponse> showItemList(@RequestParam Long categoryId, @PageableDefault(size = 10) Pageable pageable){
+    public ResponseEntity<ShoppingResponse> showItemList(@RequestParam(required = false) Long categoryId, @PageableDefault(size = 10) Pageable pageable){
         return responseApi(itemService.showItemList(categoryId,pageable));
     }
 }

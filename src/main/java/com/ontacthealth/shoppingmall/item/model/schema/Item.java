@@ -1,5 +1,6 @@
 package com.ontacthealth.shoppingmall.item.model.schema;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ontacthealth.shoppingmall.image.model.schema.ItemImage;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,11 +43,14 @@ public class Item {
     private int itemStock;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @Setter
     private ItemImage itemImage;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id",insertable = false,updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JoinColumn(name = "category_id")
+    @Setter
     private Category category;
 
     @Builder

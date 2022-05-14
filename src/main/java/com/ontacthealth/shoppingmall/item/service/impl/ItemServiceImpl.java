@@ -62,8 +62,8 @@ public class ItemServiceImpl implements ItemService {
                 .itemStock(itemSaveDto.getItemStock())
                 .category(findCategory)
                 .build();
-        itemRepository.flush();
-        findCategory.setTotalCount(findCategory.getTotalCount() + 1);
+        itemRepository.save(insertItem);
+
 
         ItemImage findItemImage = itemImageRepository.findById(itemSaveDto.getItemImageId())
                 .orElseThrow(() -> new ShoppingApiRuntimeException(ShoppingApiResult.NO_DATA));
@@ -84,7 +84,7 @@ public class ItemServiceImpl implements ItemService {
     })
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public List<Item> showItemList(Long categoryId, Pageable pageable) {
-        return Optional.ofNullable(itemRepository.findItemsByCategory_Id(categoryId, pageable))
+        return Optional.ofNullable(itemRepository.showItemListForCategoryId(categoryId, pageable))
                 .orElseThrow(() -> new ShoppingApiRuntimeException(ShoppingApiResult.NO_DATA));
     }
 }
