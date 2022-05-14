@@ -1,5 +1,6 @@
 package com.ontacthealth.shoppingmall.item.service;
 
+import com.ontacthealth.shoppingmall.item.model.dto.ItemDetailDto;
 import com.ontacthealth.shoppingmall.item.model.dto.ItemSaveDto;
 import com.ontacthealth.shoppingmall.item.model.schema.Item;
 import org.springframework.data.domain.Pageable;
@@ -17,4 +18,5 @@ import java.util.List;
 public interface ItemService {
     Item saveItem(ItemSaveDto itemSaveDto);
     List<Item> showItemList(Long categoryId, Pageable pageable);
+    ItemDetailDto showItemDetail(Long itemId);
 }

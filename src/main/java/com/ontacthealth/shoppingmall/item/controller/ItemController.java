@@ -27,12 +27,17 @@ public class ItemController extends BaseController {
     }
 
     @PostMapping("/item")
-    public ResponseEntity<ShoppingResponse> saveItem(@RequestBody ItemSaveDto itemSaveDto){
+    public ResponseEntity<ShoppingResponse> saveItem(@RequestBody ItemSaveDto itemSaveDto) {
         return responseApi(itemService.saveItem(itemSaveDto));
     }
 
     @GetMapping("/item")
-    public ResponseEntity<ShoppingResponse> showItemList(@RequestParam(required = false) Long categoryId, @PageableDefault(size = 10) Pageable pageable){
-        return responseApi(itemService.showItemList(categoryId,pageable));
+    public ResponseEntity<ShoppingResponse> showItemList(@RequestParam(required = false) Long categoryId, @PageableDefault(size = 10) Pageable pageable) {
+        return responseApi(itemService.showItemList(categoryId, pageable));
+    }
+
+    @GetMapping("/item/{itemId}")
+    public ResponseEntity<ShoppingResponse> showItemDetail(@PathVariable(value = "itemId") Long itemId) {
+        return responseApi(itemService.showItemDetail(itemId));
     }
 }
