@@ -2,6 +2,7 @@ package com.ontacthealth.shoppingmall.seller.service;
 
 import com.ontacthealth.shoppingmall.seller.model.dto.SellerIdDto;
 import com.ontacthealth.shoppingmall.seller.model.dto.SellerListDto;
+import com.ontacthealth.shoppingmall.seller.model.dto.SellerSubmitFailDto;
 import com.ontacthealth.shoppingmall.seller.model.schema.Seller;
 import org.springframework.data.domain.Pageable;
 
@@ -17,7 +18,10 @@ import java.util.List;
  */
 public interface SellerService {
     Seller saveSeller(Seller seller);
+
     List<SellerListDto> showSellerList(Pageable pageable);
     Seller showSellerDetail(Long sellerId);
+
     SellerIdDto submitSeller(Long sellerId);
+    SellerSubmitFailDto notSubmitSeller(Long sellerId,String message);
 }

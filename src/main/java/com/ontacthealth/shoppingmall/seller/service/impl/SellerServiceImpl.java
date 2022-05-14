@@ -4,6 +4,7 @@ import com.ontacthealth.shoppingmall.base_model.response.ShoppingApiResult;
 import com.ontacthealth.shoppingmall.exception.ShoppingApiRuntimeException;
 import com.ontacthealth.shoppingmall.seller.model.dto.SellerIdDto;
 import com.ontacthealth.shoppingmall.seller.model.dto.SellerListDto;
+import com.ontacthealth.shoppingmall.seller.model.dto.SellerSubmitFailDto;
 import com.ontacthealth.shoppingmall.seller.model.schema.Seller;
 import com.ontacthealth.shoppingmall.seller.repository.SellerRepository;
 import com.ontacthealth.shoppingmall.seller.service.SellerService;
@@ -94,5 +95,14 @@ public class SellerServiceImpl implements SellerService {
         findSeller.setAcceptCheck(true);
         sellerRepository.save(findSeller);
         return SellerIdDto.builder().id(findSeller.getId()).acceptCheck(findSeller.getAcceptCheck()).build();
+    }
+
+    @Override
+    public SellerSubmitFailDto notSubmitSeller(Long sellerId, String message) {
+        Seller findSeller = Optional.ofNullable(sellerRepository.findSellerBySellerId(sellerId))
+                .orElseThrow(() -> new ShoppingApiRuntimeException(ShoppingApiResult.NO_DATA, "해당 셀러는 삭제된 셀러이거나 존재하지 않은 셀러 입니다."));
+
+        return SellerSubmitFailDto.builder().id(findSeller.getId()).acceptCheck(findSeller.getAcceptCheck())
+                .message(message).build();
     }
 }
