@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -52,8 +53,11 @@ public class Seller {
     @Setter
     private Boolean acceptCheck = false;
 
+    @Column(name = "created_date")
+    private LocalDateTime createdDate;
+
     @Builder
-    public Seller(Long id, String companyName, String businessType, String businessNumber, String businessAddress, String businessCEOName, String businessCallNumber, List<Item> itemList, Boolean acceptCheck) {
+    public Seller(Long id, String companyName, String businessType, String businessNumber, String businessAddress, String businessCEOName, String businessCallNumber, List<Item> itemList, Boolean acceptCheck, LocalDateTime createdDate) {
         this.id = id;
         this.companyName = companyName;
         this.businessType = businessType;
@@ -63,5 +67,6 @@ public class Seller {
         this.businessCallNumber = businessCallNumber;
         this.itemList = itemList;
         this.acceptCheck = acceptCheck;
+        this.createdDate = createdDate;
     }
 }
