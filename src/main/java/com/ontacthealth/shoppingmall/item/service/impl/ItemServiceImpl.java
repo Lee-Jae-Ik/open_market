@@ -62,7 +62,7 @@ public class ItemServiceImpl implements ItemService {
         Category findCategory = categoryRepository.findById(itemSaveDto.getCategoryId())
                 .orElseThrow(() -> new ShoppingApiRuntimeException(ShoppingApiResult.WRONG_CATEGORY_ID));
 
-        Seller findSeller = sellerRepository.findById(itemSaveDto.getSellerId())
+        Seller findSeller = Optional.ofNullable(sellerRepository.findSellerBySellerId(itemSaveDto.getSellerId()))
                 .orElseThrow(() -> new ShoppingApiRuntimeException(ShoppingApiResult.NO_DATA,"해당 셀러는 존재하지 않습니다."));
 
         Item insertItem = Item.builder()

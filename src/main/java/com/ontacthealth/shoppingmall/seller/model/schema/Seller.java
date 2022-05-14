@@ -4,6 +4,7 @@ import com.ontacthealth.shoppingmall.item.model.schema.Item;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
@@ -47,8 +48,12 @@ public class Seller {
     @OneToMany(mappedBy = "seller", fetch = FetchType.LAZY)
     private List<Item> itemList;
 
+    @Column(name = "accept_check")
+    @Setter
+    private Boolean acceptCheck = false;
+
     @Builder
-    public Seller(Long id, String companyName, String businessType, String businessNumber, String businessAddress, String businessCEOName, String businessCallNumber, List<Item> itemList) {
+    public Seller(Long id, String companyName, String businessType, String businessNumber, String businessAddress, String businessCEOName, String businessCallNumber, List<Item> itemList, Boolean acceptCheck) {
         this.id = id;
         this.companyName = companyName;
         this.businessType = businessType;
@@ -57,5 +62,6 @@ public class Seller {
         this.businessCEOName = businessCEOName;
         this.businessCallNumber = businessCallNumber;
         this.itemList = itemList;
+        this.acceptCheck = acceptCheck;
     }
 }
