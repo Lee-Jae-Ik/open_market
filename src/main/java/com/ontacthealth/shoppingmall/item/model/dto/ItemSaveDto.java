@@ -27,12 +27,14 @@ public class ItemSaveDto {
     private int itemPrice;
     private int itemStock;
     private Long categoryId;
+    private Long itemImageId;
 
     @Builder
-    public ItemSaveDto(String itemName, int itemPrice, int itemStock, Long categoryId) {
+    public ItemSaveDto(String itemName, int itemPrice, int itemStock, Long categoryId, Long itemImageId) {
         this.itemName = itemName;
         this.itemPrice = itemPrice;
         this.itemStock = itemStock;
         this.categoryId = categoryId;
+        this.itemImageId = itemImageId;
     }
 }

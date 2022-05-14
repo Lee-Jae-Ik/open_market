@@ -1,7 +1,13 @@
 package com.ontacthealth.shoppingmall.item.controller;
 
+import com.ontacthealth.shoppingmall.base_model.response.ShoppingResponse;
 import com.ontacthealth.shoppingmall.controller.base.BaseController;
-import org.springframework.web.bind.annotation.RestController;
+import com.ontacthealth.shoppingmall.item.model.dto.ItemSaveDto;
+import com.ontacthealth.shoppingmall.item.service.ItemService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * ItemController
@@ -13,4 +19,20 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class ItemController extends BaseController {
+
+    private final ItemService itemService;
+
+    public ItemController(ItemService itemService) {
+        this.itemService = itemService;
+    }
+
+    @PostMapping("/item")
+    public ResponseEntity<ShoppingResponse> saveItem(@RequestBody ItemSaveDto itemSaveDto){
+        return responseApi(itemService.saveItem(itemSaveDto));
+    }
+
+    @GetMapping("/item")
+    public ResponseEntity<ShoppingResponse> showItemList(@RequestParam Long categoryId, @PageableDefault(size = 10) Pageable pageable){
+        return responseApi(itemService.showItemList(categoryId,pageable));
+    }
 }

@@ -1,5 +1,10 @@
 package com.ontacthealth.shoppingmall.item.repository.custom;
 
+import com.ontacthealth.shoppingmall.item.model.schema.Item;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
+
 /**
  * ItemRepositoryCustom
  *
@@ -9,4 +14,6 @@ package com.ontacthealth.shoppingmall.item.repository.custom;
  * @since 2022-04-28
  */
 public interface ItemRepositoryCustom {
+
+    List<Item> showItemListForCategoryId(Long categoryId, Pageable pageable);
 }

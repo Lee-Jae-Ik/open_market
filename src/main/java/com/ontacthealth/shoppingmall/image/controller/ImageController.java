@@ -28,6 +28,6 @@ public class ImageController extends BaseController {
 
     @PostMapping("/item/image")
     public ResponseEntity<ShoppingResponse> saveItemImage(@RequestBody ItemImageSaveDto itemImageSaveDto){
-        return responseApi(itemImageSaveDto);
+        return responseApi(itemImageService.saveItemImage(itemImageSaveDto));
     }
 }

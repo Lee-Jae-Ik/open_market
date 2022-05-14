@@ -3,6 +3,7 @@ package com.ontacthealth.shoppingmall.image.model.schema;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
@@ -30,7 +31,8 @@ public class ItemImage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JoinColumn(name = "item_id")
+    @Column(name = "item_id")
+    @Setter
     private Long itemId;
 
     @Column(name = "thumb_1")
