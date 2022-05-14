@@ -2,6 +2,7 @@ package com.ontacthealth.shoppingmall.item.model.schema;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.ontacthealth.shoppingmall.image.model.schema.ItemImage;
+import com.ontacthealth.shoppingmall.seller.model.schema.Seller;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -53,13 +54,19 @@ public class Item {
     @Setter
     private Category category;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JoinColumn(name = "seller_id")
+    private Seller seller;
+
     @Builder
-    public Item(Long id, String itemName, int itemPrice, int itemStock, ItemImage itemImage, Category category) {
+    public Item(Long id, String itemName, int itemPrice, int itemStock, ItemImage itemImage, Category category, Seller seller) {
         this.id = id;
         this.itemName = itemName;
         this.itemPrice = itemPrice;
         this.itemStock = itemStock;
         this.itemImage = itemImage;
         this.category = category;
+        this.seller = seller;
     }
 }

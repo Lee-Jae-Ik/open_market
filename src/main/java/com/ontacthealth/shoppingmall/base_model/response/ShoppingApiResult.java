@@ -23,7 +23,9 @@ public enum ShoppingApiResult {
     NO_DATA (9999,"조회한 데이터가 존재하지 않습니다."),
     NOT_INSERT_STOCK(9001, "재고는 최소 1개 이상 입력 해주셔야 합니다."),
     NOT_INSERT_PRICE(9002, "가격은 최소 100원 이상 입력 해주셔야 합니다."),
-    WRONG_CATEGORY_ID(9003, "유효하지 않은 카테고리 입니다.")
+    WRONG_CATEGORY_ID(9003, "유효하지 않은 카테고리 입니다."),
+    DUPLICATION_SELLER_ID(9004, "이미 가입된 아이디 입니다."),
+    WRONG_BUSINESS_TYPE(9005, "잘못된 사업자 유형 입니다.")
     ;
 
     @Getter

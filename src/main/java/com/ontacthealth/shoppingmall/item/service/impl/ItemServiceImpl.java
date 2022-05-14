@@ -11,6 +11,8 @@ import com.ontacthealth.shoppingmall.item.model.schema.Item;
 import com.ontacthealth.shoppingmall.image.model.schema.ItemImage;
 import com.ontacthealth.shoppingmall.image.repository.ItemImageRepository;
 import com.ontacthealth.shoppingmall.item.repository.ItemRepository;
+import com.ontacthealth.shoppingmall.seller.model.schema.Seller;
+import com.ontacthealth.shoppingmall.seller.repository.SellerRepository;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Pageable;
@@ -37,11 +39,13 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final ItemImageRepository itemImageRepository;
     private final CategoryRepository categoryRepository;
+    private final SellerRepository sellerRepository;
 
-    public ItemServiceImpl(ItemRepository itemRepository, ItemImageRepository itemImageRepository, CategoryRepository categoryRepository) {
+    public ItemServiceImpl(ItemRepository itemRepository, ItemImageRepository itemImageRepository, CategoryRepository categoryRepository, SellerRepository sellerRepository) {
         this.itemRepository = itemRepository;
         this.itemImageRepository = itemImageRepository;
         this.categoryRepository = categoryRepository;
+        this.sellerRepository = sellerRepository;
     }
 
     @Override
@@ -58,11 +62,15 @@ public class ItemServiceImpl implements ItemService {
         Category findCategory = categoryRepository.findById(itemSaveDto.getCategoryId())
                 .orElseThrow(() -> new ShoppingApiRuntimeException(ShoppingApiResult.WRONG_CATEGORY_ID));
 
+        Seller findSeller = sellerRepository.findById(itemSaveDto.getSellerId())
+                .orElseThrow(() -> new ShoppingApiRuntimeException(ShoppingApiResult.NO_DATA,"해당 셀러는 존재하지 않습니다."));
+
         Item insertItem = Item.builder()
                 .itemName(itemSaveDto.getItemName())
                 .itemPrice(itemSaveDto.getItemPrice())
                 .itemStock(itemSaveDto.getItemStock())
                 .category(findCategory)
+                .seller(findSeller)
                 .build();
         itemRepository.save(insertItem);
 

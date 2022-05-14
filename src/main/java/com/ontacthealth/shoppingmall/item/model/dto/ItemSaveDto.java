@@ -24,14 +24,16 @@ import org.springframework.web.context.WebApplicationContext;
 public class ItemSaveDto {
 
     private String itemName;
+    private Long sellerId;
     private int itemPrice;
     private int itemStock;
     private Long categoryId;
     private Long itemImageId;
 
     @Builder
-    public ItemSaveDto(String itemName, int itemPrice, int itemStock, Long categoryId, Long itemImageId) {
+    public ItemSaveDto(String itemName, Long sellerId, int itemPrice, int itemStock, Long categoryId, Long itemImageId) {
         this.itemName = itemName;
+        this.sellerId = sellerId;
         this.itemPrice = itemPrice;
         this.itemStock = itemStock;
         this.categoryId = categoryId;
