@@ -14,6 +14,6 @@ import java.util.List;
  * @since 2022/05/14
  */
 public interface SellerRepositoryCustom {
-
     List<Seller> showSellerListNonSubmit(Pageable pageable);
+    void sellerUpdateMessage(Long sellerId,String message);
 }

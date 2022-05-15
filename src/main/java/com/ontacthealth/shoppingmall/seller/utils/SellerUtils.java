@@ -14,8 +14,8 @@ import com.ontacthealth.shoppingmall.seller.model.schema.Seller;
  */
 public class SellerUtils {
 
-    public static Boolean checkValidationSeller(Seller seller) {
-        switch (seller.getBusinessType()) {
+    public static Boolean checkValidationSeller(String businessType) {
+        switch (businessType) {
             case "간이":
             case "일반":
             case "법인":

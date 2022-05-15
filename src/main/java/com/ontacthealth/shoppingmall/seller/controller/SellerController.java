@@ -2,12 +2,12 @@ package com.ontacthealth.shoppingmall.seller.controller;
 
 import com.ontacthealth.shoppingmall.base_model.response.ShoppingResponse;
 import com.ontacthealth.shoppingmall.controller.base.BaseController;
+import com.ontacthealth.shoppingmall.seller.model.dto.SellerSignUpDto;
 import com.ontacthealth.shoppingmall.seller.model.schema.Seller;
 import com.ontacthealth.shoppingmall.seller.service.SellerService;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * SellerController
@@ -27,7 +27,23 @@ public class SellerController extends BaseController {
     }
 
     @PostMapping("/seller/signup")
-    public ResponseEntity<ShoppingResponse> signUpSeller(@RequestBody Seller seller) {
-        return responseApi(sellerService.saveSeller(seller));
+    public ResponseEntity<ShoppingResponse> signUpSeller(@RequestBody SellerSignUpDto sellerSignUpDto) {
+        return responseApi(sellerService.saveSeller(sellerSignUpDto));
+    }
+
+    @GetMapping("/seller")
+    public ResponseEntity<ShoppingResponse> showSellerList(Pageable pageable) {
+        return responseApi(sellerService.showSellerList(pageable));
+    }
+
+    @PostMapping("/seller/submit")
+    public ResponseEntity<ShoppingResponse> submitSeller(@RequestParam Long sellerId) {
+        return responseApi(sellerService.submitSeller(sellerId));
+    }
+
+    @PostMapping("/seller/submit/not")
+    public ResponseEntity<ShoppingResponse> notSubmitSeller(@RequestParam(value = "sellerId") Long sellerId,
+                                                            @RequestParam(value = "message", required = false) String message) {
+        return responseApi(sellerService.notSubmitSeller(sellerId, message));
     }
 }

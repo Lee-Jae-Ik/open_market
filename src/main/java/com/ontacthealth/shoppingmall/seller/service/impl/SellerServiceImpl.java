@@ -4,6 +4,7 @@ import com.ontacthealth.shoppingmall.base_model.response.ShoppingApiResult;
 import com.ontacthealth.shoppingmall.exception.ShoppingApiRuntimeException;
 import com.ontacthealth.shoppingmall.seller.model.dto.SellerIdDto;
 import com.ontacthealth.shoppingmall.seller.model.dto.SellerListDto;
+import com.ontacthealth.shoppingmall.seller.model.dto.SellerSignUpDto;
 import com.ontacthealth.shoppingmall.seller.model.dto.SellerSubmitFailDto;
 import com.ontacthealth.shoppingmall.seller.model.schema.Seller;
 import com.ontacthealth.shoppingmall.seller.repository.SellerRepository;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,7 +33,6 @@ import java.util.stream.Collectors;
  * @since 2022-05-14
  */
 @Service
-@Transactional(readOnly = true)
 public class SellerServiceImpl implements SellerService {
 
     private final SellerRepository sellerRepository;
@@ -44,21 +46,36 @@ public class SellerServiceImpl implements SellerService {
             NullPointerException.class,
             IllegalAccessException.class
     })
-    public Seller saveSeller(Seller seller) {
-        Optional<Seller> findSeller = sellerRepository.findById(seller.getId());
-        if (findSeller.isPresent()){
+    public Seller saveSeller(SellerSignUpDto sellerSignUpDto) {
+
+        Optional<Seller> findSeller = Optional.ofNullable(sellerRepository.findSellerByBusinessNumber(sellerSignUpDto.getBusinessNumber()));
+        if (findSeller.isPresent()) {
             throw new ShoppingApiRuntimeException(ShoppingApiResult.DUPLICATION_SELLER_ID);
         }
 
-        if (!SellerUtils.checkValidationSeller(seller)) {
+        if (Boolean.FALSE.equals(SellerUtils.checkValidationSeller(sellerSignUpDto.getBusinessType()))) {
             throw new ShoppingApiRuntimeException(ShoppingApiResult.WRONG_BUSINESS_TYPE);
         }
 
-        return sellerRepository.save(seller);
+        Seller insertSeller = Seller.builder()
+                .businessNumber(sellerSignUpDto.getBusinessNumber())
+                .businessAddress(sellerSignUpDto.getBusinessAddress())
+                .businessCEOName(sellerSignUpDto.getBusinessCEOName())
+                .businessCallNumber(sellerSignUpDto.getBusinessCallNumber())
+                .businessType(sellerSignUpDto.getBusinessType())
+                .companyName(sellerSignUpDto.getCompanyName())
+                .acceptCheck(false)
+                .createdDate(LocalDateTime.now())
+                .build();
+
+        return sellerRepository.save(insertSeller);
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Transactional(
+            isolation = Isolation.READ_COMMITTED,
+            readOnly = true
+    )
     @Caching(
             evict = @CacheEvict(
                     key = "#sellerListDto.id + '.' + #sellerListDto.companyName + '.' + #sellerListDto.createdDate",
@@ -71,13 +88,19 @@ public class SellerServiceImpl implements SellerService {
                 .map(seller ->
                         SellerListDto.builder()
                                 .id(seller.getId())
+                                .businessCEOName(seller.getBusinessCEOName())
                                 .companyName(seller.getCompanyName())
-                                .createdDate(seller.getCreatedDate()).build())
+                                .businessType(seller.getBusinessType())
+                                .businessNumber(seller.getBusinessNumber())
+                                .createdDate(seller.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))).build())
                 .collect(Collectors.toList());
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED)
+    @Transactional(
+            isolation = Isolation.READ_COMMITTED,
+            readOnly = true
+    )
     public Seller showSellerDetail(Long sellerId) {
         return Optional.ofNullable(sellerRepository.findSellerBySellerId(sellerId))
                 .orElseThrow(() -> new ShoppingApiRuntimeException(ShoppingApiResult.NO_DATA, "해당 셀러는 삭제된 셀러이거나 존재하지 않은 셀러 입니다."));
@@ -98,9 +121,15 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
+    @Transactional(rollbackFor = {
+            NullPointerException.class,
+            IllegalAccessException.class
+    })
     public SellerSubmitFailDto notSubmitSeller(Long sellerId, String message) {
         Seller findSeller = Optional.ofNullable(sellerRepository.findSellerBySellerId(sellerId))
                 .orElseThrow(() -> new ShoppingApiRuntimeException(ShoppingApiResult.NO_DATA, "해당 셀러는 삭제된 셀러이거나 존재하지 않은 셀러 입니다."));
+
+        sellerRepository.sellerUpdateMessage(sellerId, message);
 
         return SellerSubmitFailDto.builder().id(findSeller.getId()).acceptCheck(findSeller.getAcceptCheck())
                 .message(message).build();

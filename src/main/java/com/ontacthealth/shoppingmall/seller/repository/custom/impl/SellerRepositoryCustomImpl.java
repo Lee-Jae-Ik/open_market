@@ -7,6 +7,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -36,5 +37,14 @@ public class SellerRepositoryCustomImpl implements SellerRepositoryCustom {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+    }
+
+    @Override
+    public void sellerUpdateMessage(Long sellerId,String message) {
+        jpaQueryFactory
+                .update(QSeller.seller)
+                .set(QSeller.seller.message, message)
+                .where(QSeller.seller.id.eq(sellerId))
+                .execute();
     }
 }

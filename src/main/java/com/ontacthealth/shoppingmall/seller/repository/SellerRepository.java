@@ -18,6 +18,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SellerRepository extends JpaRepository<Seller, Long>, SellerRepositoryCustom {
 
-    @Query("select s from Seller s where s.id = :sellerId and s.acceptCheck = true")
+    @Query("select s from Seller s where s.id = :sellerId and s.acceptCheck = false")
     Seller findSellerBySellerId(@Param("sellerId") Long sellerId);
+
+    Seller findSellerByBusinessNumber(String businessNumber);
 }

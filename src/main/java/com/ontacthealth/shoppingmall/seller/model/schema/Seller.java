@@ -1,5 +1,6 @@
 package com.ontacthealth.shoppingmall.seller.model.schema;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ontacthealth.shoppingmall.item.model.schema.Item;
 import lombok.Builder;
 import lombok.Getter;
@@ -56,8 +57,12 @@ public class Seller {
     @Column(name = "created_date")
     private LocalDateTime createdDate;
 
+    @Column(name = "message")
+    @Setter
+    private String message;
+
     @Builder
-    public Seller(Long id, String companyName, String businessType, String businessNumber, String businessAddress, String businessCEOName, String businessCallNumber, List<Item> itemList, Boolean acceptCheck, LocalDateTime createdDate) {
+    public Seller(Long id, String companyName, String businessType, String businessNumber, String businessAddress, String businessCEOName, String businessCallNumber, List<Item> itemList, Boolean acceptCheck, LocalDateTime createdDate, String message) {
         this.id = id;
         this.companyName = companyName;
         this.businessType = businessType;
@@ -68,5 +73,6 @@ public class Seller {
         this.itemList = itemList;
         this.acceptCheck = acceptCheck;
         this.createdDate = createdDate;
+        this.message = message;
     }
 }

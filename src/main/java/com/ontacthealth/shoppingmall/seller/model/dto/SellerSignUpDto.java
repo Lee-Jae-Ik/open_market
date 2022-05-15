@@ -9,36 +9,40 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 
 import javax.persistence.Column;
-import java.time.LocalDateTime;
 
 /**
- * SellerListDto
+ * SellerSignUpDto
  *
  * @author Lee-Jae-Ik
  * @version 0.1
  * @see
- * @since 2022/05/14
+ * @since 2022-05-15
  */
 @Component
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 @Getter
 @NoArgsConstructor
-public class SellerListDto {
+public class SellerSignUpDto {
 
-    private Long id;
-    private String businessCEOName;
     private String companyName;
+
     private String businessType;
+
     private String businessNumber;
-    private String createdDate;
+
+    private String businessAddress;
+
+    private String businessCEOName;
+
+    private String businessCallNumber;
 
     @Builder
-    public SellerListDto(Long id, String businessCEOName, String companyName, String businessType, String businessNumber, String createdDate) {
-        this.id = id;
-        this.businessCEOName = businessCEOName;
+    public SellerSignUpDto(String companyName, String businessType, String businessNumber, String businessAddress, String businessCEOName, String businessCallNumber) {
         this.companyName = companyName;
         this.businessType = businessType;
         this.businessNumber = businessNumber;
-        this.createdDate = createdDate;
+        this.businessAddress = businessAddress;
+        this.businessCEOName = businessCEOName;
+        this.businessCallNumber = businessCallNumber;
     }
 }
