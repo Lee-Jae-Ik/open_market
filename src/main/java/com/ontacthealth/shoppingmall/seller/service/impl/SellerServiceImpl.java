@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
  * @since 2022-05-14
  */
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class SellerServiceImpl implements SellerService {
 
     private final SellerRepository sellerRepository;
@@ -39,10 +40,6 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    @Transactional(rollbackFor = {
-            NullPointerException.class,
-            IllegalAccessException.class
-    })
     public SellerDto saveSeller(SellerSignUpDto sellerSignUpDto) {
 
         Optional<Seller> findSeller = Optional.ofNullable(sellerRepository.findSellerByBusinessNumber(sellerSignUpDto.getBusinessNumber()));
@@ -80,10 +77,6 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    @Transactional(
-            isolation = Isolation.READ_COMMITTED,
-            readOnly = true
-    )
     @Caching(
             evict = @CacheEvict(
                     key = "#sellerListDto.id + '.' + #sellerListDto.companyName + '.' + #sellerListDto.createdDate",
@@ -105,10 +98,6 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    @Transactional(
-            isolation = Isolation.READ_COMMITTED,
-            readOnly = true
-    )
     public SellerDto showSellerDetail(Long sellerId) {
         Seller findSeller = Optional.ofNullable(sellerRepository.findSellerBySellerId(sellerId))
                 .orElseThrow(() -> new ShoppingApiRuntimeException(ShoppingApiResult.NO_DATA, "해당 셀러는 삭제된 셀러이거나 존재하지 않은 셀러 입니다."));
@@ -127,10 +116,6 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    @Transactional(rollbackFor = {
-            NullPointerException.class,
-            IllegalAccessException.class
-    })
     public SellerIdDto submitSeller(Long sellerId) {
         Seller findSeller = Optional.ofNullable(sellerRepository.findSellerBySellerId(sellerId))
                 .orElseThrow(() -> new ShoppingApiRuntimeException(ShoppingApiResult.NO_DATA, "해당 셀러는 삭제된 셀러이거나 존재하지 않은 셀러 입니다."));
@@ -141,10 +126,6 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    @Transactional(rollbackFor = {
-            NullPointerException.class,
-            IllegalAccessException.class
-    })
     public SellerSubmitFailDto notSubmitSeller(Long sellerId, String message) {
         Seller findSeller = Optional.ofNullable(sellerRepository.findSellerBySellerId(sellerId))
                 .orElseThrow(() -> new ShoppingApiRuntimeException(ShoppingApiResult.NO_DATA, "해당 셀러는 삭제된 셀러이거나 존재하지 않은 셀러 입니다."));

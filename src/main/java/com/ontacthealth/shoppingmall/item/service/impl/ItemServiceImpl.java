@@ -34,7 +34,7 @@ import java.util.Optional;
  * @since 2022-04-28
  */
 @Service
-@Transactional(readOnly = true)
+@Transactional(rollbackFor = Exception.class)
 public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
@@ -50,8 +50,6 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    @Transactional(rollbackFor =
-            {NullPointerException.class, IllegalAccessException.class})
     public ItemDto saveItem(ItemSaveDto itemSaveDto) {
 
         if (itemSaveDto.getItemStock() == 0) {
@@ -101,7 +99,6 @@ public class ItemServiceImpl implements ItemService {
                     value = "CATEGORY"
             )
     })
-    @Transactional(isolation = Isolation.READ_COMMITTED)
     public List<Item> showItemList(Long categoryId, Pageable pageable) {
         return Optional.ofNullable(itemRepository.showItemListForCategoryId(categoryId, pageable))
                 .orElseThrow(() -> new ShoppingApiRuntimeException(ShoppingApiResult.NO_DATA));
