@@ -2,6 +2,7 @@ package com.ontacthealth.shoppingmall.item.service.impl;
 
 import com.ontacthealth.shoppingmall.exception.ShoppingApiRuntimeException;
 import com.ontacthealth.shoppingmall.item.model.dto.ItemDetailDto;
+import com.ontacthealth.shoppingmall.item.model.dto.ItemDto;
 import com.ontacthealth.shoppingmall.item.model.schema.Category;
 import com.ontacthealth.shoppingmall.item.repository.CategoryRepository;
 import com.ontacthealth.shoppingmall.item.service.ItemService;
@@ -51,7 +52,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional(rollbackFor =
             {NullPointerException.class, IllegalAccessException.class})
-    public Item saveItem(ItemSaveDto itemSaveDto) {
+    public ItemDto saveItem(ItemSaveDto itemSaveDto) {
 
         if (itemSaveDto.getItemStock() == 0) {
             throw new ShoppingApiRuntimeException(ShoppingApiResult.NOT_INSERT_STOCK);
@@ -82,7 +83,15 @@ public class ItemServiceImpl implements ItemService {
         findItemImage.setItemId(insertItem.getId());
         itemImageRepository.save(findItemImage);
 
-        return insertItem;
+        return ItemDto.builder()
+                .id(insertItem.getId())
+                .itemImageId(insertItem.getItemImage().getId())
+                .categoryId(insertItem.getCategory().getId())
+                .sellerId(insertItem.getSeller().getId())
+                .itemName(insertItem.getItemName())
+                .itemPrice(insertItem.getItemPrice())
+                .itemStock(insertItem.getItemStock())
+                .build();
     }
 
     @Override

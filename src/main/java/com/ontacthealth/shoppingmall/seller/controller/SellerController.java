@@ -36,6 +36,11 @@ public class SellerController extends BaseController {
         return responseApi(sellerService.showSellerList(pageable));
     }
 
+    @GetMapping("/seller/{sellerId}")
+    public ResponseEntity<ShoppingResponse> showSellerDetail(@PathVariable(value = "sellerId") Long sellerId) {
+        return responseApi(sellerService.showSellerDetail(sellerId));
+    }
+
     @PostMapping("/seller/submit")
     public ResponseEntity<ShoppingResponse> submitSeller(@RequestParam Long sellerId) {
         return responseApi(sellerService.submitSeller(sellerId));

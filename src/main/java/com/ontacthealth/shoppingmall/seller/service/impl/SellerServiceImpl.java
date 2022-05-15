@@ -2,10 +2,7 @@ package com.ontacthealth.shoppingmall.seller.service.impl;
 
 import com.ontacthealth.shoppingmall.base_model.response.ShoppingApiResult;
 import com.ontacthealth.shoppingmall.exception.ShoppingApiRuntimeException;
-import com.ontacthealth.shoppingmall.seller.model.dto.SellerIdDto;
-import com.ontacthealth.shoppingmall.seller.model.dto.SellerListDto;
-import com.ontacthealth.shoppingmall.seller.model.dto.SellerSignUpDto;
-import com.ontacthealth.shoppingmall.seller.model.dto.SellerSubmitFailDto;
+import com.ontacthealth.shoppingmall.seller.model.dto.*;
 import com.ontacthealth.shoppingmall.seller.model.schema.Seller;
 import com.ontacthealth.shoppingmall.seller.repository.SellerRepository;
 import com.ontacthealth.shoppingmall.seller.service.SellerService;
@@ -46,7 +43,7 @@ public class SellerServiceImpl implements SellerService {
             NullPointerException.class,
             IllegalAccessException.class
     })
-    public Seller saveSeller(SellerSignUpDto sellerSignUpDto) {
+    public SellerDto saveSeller(SellerSignUpDto sellerSignUpDto) {
 
         Optional<Seller> findSeller = Optional.ofNullable(sellerRepository.findSellerByBusinessNumber(sellerSignUpDto.getBusinessNumber()));
         if (findSeller.isPresent()) {
@@ -57,7 +54,7 @@ public class SellerServiceImpl implements SellerService {
             throw new ShoppingApiRuntimeException(ShoppingApiResult.WRONG_BUSINESS_TYPE);
         }
 
-        Seller insertSeller = Seller.builder()
+        Seller insertSeller =  sellerRepository.save(Seller.builder()
                 .businessNumber(sellerSignUpDto.getBusinessNumber())
                 .businessAddress(sellerSignUpDto.getBusinessAddress())
                 .businessCEOName(sellerSignUpDto.getBusinessCEOName())
@@ -66,9 +63,20 @@ public class SellerServiceImpl implements SellerService {
                 .companyName(sellerSignUpDto.getCompanyName())
                 .acceptCheck(false)
                 .createdDate(LocalDateTime.now())
-                .build();
+                .build());
 
-        return sellerRepository.save(insertSeller);
+        return SellerDto.builder()
+                .id(insertSeller.getId())
+                .businessCEOName(insertSeller.getBusinessCEOName())
+                .companyName(insertSeller.getCompanyName())
+                .businessType(insertSeller.getBusinessType())
+                .businessNumber(insertSeller.getBusinessNumber())
+                .createdDate(insertSeller.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .acceptCheck(insertSeller.getAcceptCheck())
+                .businessAddress(insertSeller.getBusinessAddress())
+                .businessCallNumber(insertSeller.getBusinessCallNumber())
+                .message(insertSeller.getMessage())
+                .build();
     }
 
     @Override
@@ -101,9 +109,21 @@ public class SellerServiceImpl implements SellerService {
             isolation = Isolation.READ_COMMITTED,
             readOnly = true
     )
-    public Seller showSellerDetail(Long sellerId) {
-        return Optional.ofNullable(sellerRepository.findSellerBySellerId(sellerId))
+    public SellerDto showSellerDetail(Long sellerId) {
+        Seller findSeller = Optional.ofNullable(sellerRepository.findSellerBySellerId(sellerId))
                 .orElseThrow(() -> new ShoppingApiRuntimeException(ShoppingApiResult.NO_DATA, "해당 셀러는 삭제된 셀러이거나 존재하지 않은 셀러 입니다."));
+        return SellerDto.builder()
+                .id(findSeller.getId())
+                .businessCEOName(findSeller.getBusinessCEOName())
+                .companyName(findSeller.getCompanyName())
+                .businessType(findSeller.getBusinessType())
+                .businessNumber(findSeller.getBusinessNumber())
+                .createdDate(findSeller.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .acceptCheck(findSeller.getAcceptCheck())
+                .businessAddress(findSeller.getBusinessAddress())
+                .businessCallNumber(findSeller.getBusinessCallNumber())
+                .message(findSeller.getMessage())
+                .build();
     }
 
     @Override

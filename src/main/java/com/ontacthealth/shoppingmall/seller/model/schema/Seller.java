@@ -1,6 +1,8 @@
 package com.ontacthealth.shoppingmall.seller.model.schema;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.ontacthealth.shoppingmall.item.model.schema.Item;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,6 +50,7 @@ public class Seller {
     private String businessCallNumber;
 
     @OneToMany(mappedBy = "seller", fetch = FetchType.LAZY)
+//    @JsonManagedReference
     private List<Item> itemList;
 
     @Column(name = "accept_check")
