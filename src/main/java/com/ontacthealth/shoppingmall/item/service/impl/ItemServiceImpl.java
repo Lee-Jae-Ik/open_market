@@ -15,6 +15,7 @@ import com.ontacthealth.shoppingmall.item.repository.ItemRepository;
 import com.ontacthealth.shoppingmall.seller.model.schema.Seller;
 import com.ontacthealth.shoppingmall.seller.repository.SellerRepository;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @CacheEvict("itemCache")
     public ItemDto saveItem(ItemSaveDto itemSaveDto) {
 
         if (itemSaveDto.getItemStock() == 0) {
@@ -93,12 +95,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    @Caching(evict = {
-            @CacheEvict(
-                    key = "#item.category.id",
-                    value = "CATEGORY"
-            )
-    })
+    @Cacheable("itemCache")
     public List<Item> showItemList(Long categoryId, Pageable pageable) {
         return Optional.ofNullable(itemRepository.showItemListForCategoryId(categoryId, pageable))
                 .orElseThrow(() -> new ShoppingApiRuntimeException(ShoppingApiResult.NO_DATA));

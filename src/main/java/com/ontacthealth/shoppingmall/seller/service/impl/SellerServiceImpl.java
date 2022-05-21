@@ -8,6 +8,7 @@ import com.ontacthealth.shoppingmall.seller.repository.SellerRepository;
 import com.ontacthealth.shoppingmall.seller.service.SellerService;
 import com.ontacthealth.shoppingmall.seller.utils.SellerUtils;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,7 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
+    @CacheEvict("sellerCache")
     public SellerDto saveSeller(SellerSignUpDto sellerSignUpDto) {
 
         Optional<Seller> findSeller = Optional.ofNullable(sellerRepository.findSellerByBusinessNumber(sellerSignUpDto.getBusinessNumber()));
@@ -77,12 +79,7 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    @Caching(
-            evict = @CacheEvict(
-                    key = "#sellerListDto.id + '.' + #sellerListDto.companyName + '.' + #sellerListDto.createdDate",
-                    value = "SELLER"
-            )
-    )
+    @Cacheable("sellerCache")
     public List<SellerListDto> showSellerList(Pageable pageable) {
         List<Seller> sellerList = sellerRepository.showSellerListNonSubmit(pageable);
         return sellerList.stream()
@@ -98,6 +95,7 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
+    @CacheEvict("sellerCache")
     public SellerDto showSellerDetail(Long sellerId) {
         Seller findSeller = Optional.ofNullable(sellerRepository.findSellerBySellerId(sellerId))
                 .orElseThrow(() -> new ShoppingApiRuntimeException(ShoppingApiResult.NO_DATA, "해당 셀러는 삭제된 셀러이거나 존재하지 않은 셀러 입니다."));
@@ -116,6 +114,7 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
+    @CacheEvict("sellerCache")
     public SellerIdDto submitSeller(Long sellerId) {
         Seller findSeller = Optional.ofNullable(sellerRepository.findSellerBySellerId(sellerId))
                 .orElseThrow(() -> new ShoppingApiRuntimeException(ShoppingApiResult.NO_DATA, "해당 셀러는 삭제된 셀러이거나 존재하지 않은 셀러 입니다."));
@@ -126,6 +125,7 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
+    @CacheEvict("sellerCache")
     public SellerSubmitFailDto notSubmitSeller(Long sellerId, String message) {
         Seller findSeller = Optional.ofNullable(sellerRepository.findSellerBySellerId(sellerId))
                 .orElseThrow(() -> new ShoppingApiRuntimeException(ShoppingApiResult.NO_DATA, "해당 셀러는 삭제된 셀러이거나 존재하지 않은 셀러 입니다."));
