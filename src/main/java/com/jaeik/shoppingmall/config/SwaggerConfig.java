@@ -24,7 +24,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.OAS_30)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.ontacthealth.shoppingmall"))
+                .apis(RequestHandlerSelectors.basePackage("com.jaeik.shoppingmall"))
                 .paths(PathSelectors.any())
                 .build().useDefaultResponseMessages(false);
     }

@@ -32,6 +32,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: '2.6.1'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: '2.3.12.RELEASE'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.6.3'
     implementation group: 'aspectj', name: 'aspectjrt', version: '1.5.4'
 
     // lombok
