@@ -16,4 +16,5 @@ import java.util.List;
 public interface ItemRepositoryCustom {
 
     List<Item> showItemListForCategoryId(Long categoryId, Pageable pageable);
+    List<Item> showItemListForItemName(String itemName, Pageable pageable);
 }

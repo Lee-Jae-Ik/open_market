@@ -18,6 +18,9 @@ import java.util.List;
  */
 public interface ItemService {
     ItemDto saveItem(ItemSaveDto itemSaveDto);
+
     List<Item> showItemList(Long categoryId, Pageable pageable);
+    List<Item> showItemListByItemName(String itemName, Pageable pageable);
+
     ItemDetailDto showItemDetail(Long itemId);
 }

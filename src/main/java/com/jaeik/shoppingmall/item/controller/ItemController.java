@@ -40,4 +40,9 @@ public class ItemController extends BaseController {
     public ResponseEntity<ShoppingResponse> showItemDetail(@PathVariable(value = "itemId") Long itemId) {
         return responseApi(itemService.showItemDetail(itemId));
     }
+
+    @GetMapping("/item/name/{itemName}")
+    public ResponseEntity<ShoppingResponse> showItemSearchItemName(@PathVariable(value = "itemName") String itemName, Pageable pageable) {
+        return responseApi(itemService.showItemListByItemName(itemName,pageable));
+    }
 }

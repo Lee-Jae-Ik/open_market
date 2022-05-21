@@ -100,6 +100,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public List<Item> showItemListByItemName(String itemName, Pageable pageable) {
+        return itemRepository.showItemListForItemName(itemName,pageable);
+    }
+
+    @Override
     public ItemDetailDto showItemDetail(Long itemId) {
         Item findItem = itemRepository.findById(itemId)
                 .orElseThrow(() -> new ShoppingApiRuntimeException(ShoppingApiResult.NO_DATA, "삭제 되었거나 존재하지 않은 상품 입니다."));

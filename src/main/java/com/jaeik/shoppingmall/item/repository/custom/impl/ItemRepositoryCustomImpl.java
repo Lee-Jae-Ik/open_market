@@ -7,8 +7,15 @@ import com.jaeik.shoppingmall.item.repository.custom.ItemRepositoryCustom;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.query.Criteria;
+import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
+import org.springframework.data.elasticsearch.core.query.Query;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * ItemRepositoryCustomImpl
@@ -20,9 +27,11 @@ import java.util.List;
  */
 public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
+    private final ElasticsearchOperations elasticsearchOperations;
 
-    public ItemRepositoryCustomImpl(JPAQueryFactory jpaQueryFactory) {
+    public ItemRepositoryCustomImpl(JPAQueryFactory jpaQueryFactory, ElasticsearchOperations elasticsearchOperations) {
         this.jpaQueryFactory = jpaQueryFactory;
+        this.elasticsearchOperations = elasticsearchOperations;
     }
 
     @Override
@@ -45,5 +54,15 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
+    }
+
+    @Override
+    public List<Item> showItemListForItemName(String itemName, Pageable pageable) {
+        Criteria criteria = Criteria.where("item.itemName").contains(itemName);
+        Query query = new CriteriaQuery(criteria).setPageable(pageable);
+        SearchHits<Item> searchHits = elasticsearchOperations.search(query, Item.class);
+        return searchHits.stream()
+                .map(SearchHit::getContent)
+                .collect(Collectors.toList());
     }
 }
