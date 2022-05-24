@@ -6,6 +6,11 @@ logging:
       type:
         descriptor:
           sql: trace
+    springframework:
+      data:
+        elasticsearch:
+          client:
+            WIRE: TRACE
 
 #mybatis config
 mybatis:
@@ -19,7 +24,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/shopping?characterEncoding=UTF-8&enabledTLSProtocols=TLSv1.2&autoReconnect=true
     username: root
-    password: 'lji39220922'
+    password: 'OntactRoot2022#'
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       auto-commit: false
